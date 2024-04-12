@@ -20,7 +20,7 @@ public class TrainerWorkloadService {
     private final TrainerWorkloadDAO trainerWorkloadDAO;
 
     public void updateWorkload(TrainerWorkloadRequest request) {
-        Trainer trainer = trainerWorkloadDAO.get(request.getTrainerUsername());
+        Trainer trainer = trainerWorkloadDAO.findTrainerByUsername(request.getTrainerUsername());
         log.info("Updating trainer work load");
         log.info("Request details {}", request);
         if (trainer == null) {

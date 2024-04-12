@@ -1,6 +1,8 @@
 package com.gypApp_workLoadService.model;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Map;
 
@@ -9,9 +11,11 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "trainers")
 @Builder
 public class Trainer {
 
+    @MongoId
     private String username;
     private String firstName;
     private String lastName;

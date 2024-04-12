@@ -42,7 +42,7 @@ public class TrainerWorkloadServiceTest {
                 .trainingDate(LocalDate.now())
                 .build();
 
-        when(trainerWorkloadDAO.get("john_doe")).thenReturn(null);
+        when(trainerWorkloadDAO.findTrainerByUsername("john_doe")).thenReturn(null);
 
         trainerWorkloadService.updateWorkload(request);
 
@@ -71,7 +71,7 @@ public class TrainerWorkloadServiceTest {
                 .trainingSummaryDuration(trainingSummary)
                 .build();
 
-        when(trainerWorkloadDAO.get("john_doe")).thenReturn(existingTrainer);
+        when(trainerWorkloadDAO.findTrainerByUsername("john_doe")).thenReturn(existingTrainer);
 
         trainerWorkloadService.updateWorkload(request);
 
