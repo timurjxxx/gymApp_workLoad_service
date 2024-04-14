@@ -71,7 +71,7 @@ public class TrainerWorkloadService {
 
     String generateKeyForTrainingSummaryDuration(TrainerWorkloadRequest request) {
         log.info("Generate date for work load from request :{}", request);
-        return request.getTrainingDate().getMonthValue() + "." + request.getTrainingDate().getYear();
+        return request.getTrainingDate().getMonthValue() + ":" + request.getTrainingDate().getYear();
     }
 
 

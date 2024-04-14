@@ -62,7 +62,7 @@ public class TrainerWorkloadServiceTest {
                 .build();
 
         Map<String, Integer> trainingSummary = new HashMap<>();
-        trainingSummary.put("4.2022", 120); // Example existing data
+        trainingSummary.put("4:2022", 120); // Example existing data
         Trainer existingTrainer = Trainer.builder()
                 .username("john_doe")
                 .firstName("John")
@@ -101,8 +101,8 @@ public class TrainerWorkloadServiceTest {
         assertTrue(newTrainer.getIsActive());
 
         assertEquals(1, newTrainer.getTrainingSummaryDuration().size());
-        assertTrue(newTrainer.getTrainingSummaryDuration().containsKey(LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()));
-        assertEquals(60, newTrainer.getTrainingSummaryDuration().get(LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()));
+        assertTrue(newTrainer.getTrainingSummaryDuration().containsKey(LocalDate.now().getMonthValue() + ":" + LocalDate.now().getYear()));
+        assertEquals(60, newTrainer.getTrainingSummaryDuration().get(LocalDate.now().getMonthValue() + ":" + LocalDate.now().getYear()));
     }
 
 
@@ -111,7 +111,7 @@ public class TrainerWorkloadServiceTest {
         Trainer existingTrainer = Trainer.builder()
                 .trainingSummaryDuration(new HashMap<>())
                 .build();
-        existingTrainer.getTrainingSummaryDuration().put("4.2022", 120);
+        existingTrainer.getTrainingSummaryDuration().put("4:2022", 120);
 
         TrainerWorkloadRequest request = TrainerWorkloadRequest.builder()
                 .trainingDate(LocalDate.of(2022, 4, 15))
@@ -119,7 +119,7 @@ public class TrainerWorkloadServiceTest {
 
         String yearAndMonth = trainerWorkloadService.getYearAndMonth(existingTrainer.getTrainingSummaryDuration(), request);
 
-        assertEquals("4.2022", yearAndMonth);
+        assertEquals("4:2022", yearAndMonth);
     }
 
     @Test
@@ -130,13 +130,13 @@ public class TrainerWorkloadServiceTest {
 
         String key = trainerWorkloadService.generateKeyForTrainingSummaryDuration(request);
 
-        assertEquals("4.2022", key);
+        assertEquals("4:2022", key);
     }
 
     @Test
     void testUpdateTrainerWorkLoad_AddExistingRecord() {
         Map<String, Integer> trainingSummary = new HashMap<>();
-        trainingSummary.put("4.2022", 120);
+        trainingSummary.put("4:2022", 120);
         Trainer trainer = Trainer.builder()
                 .trainingSummaryDuration(trainingSummary)
                 .build();
@@ -150,14 +150,14 @@ public class TrainerWorkloadServiceTest {
 
 
         assertEquals(1, updatedTrainer.getTrainingSummaryDuration().size());
-        assertTrue(updatedTrainer.getTrainingSummaryDuration().containsKey("4.2022"));
-        assertEquals(180, updatedTrainer.getTrainingSummaryDuration().get("4.2022"));
+        assertTrue(updatedTrainer.getTrainingSummaryDuration().containsKey("4:2022"));
+        assertEquals(180, updatedTrainer.getTrainingSummaryDuration().get("4:2022"));
     }
 
     @Test
     void testUpdateTrainerWorkLoad_RemoveExistingRecord() {
         Map<String, Integer> trainingSummary = new HashMap<>();
-        trainingSummary.put("4.2022", 120); // Existing record
+        trainingSummary.put("4:2022", 120);
         Trainer trainer = Trainer.builder()
                 .trainingSummaryDuration(trainingSummary)
                 .build();
@@ -170,8 +170,8 @@ public class TrainerWorkloadServiceTest {
         Trainer updatedTrainer = trainerWorkloadService.updateTrainerWorkLoad(trainer, request);
 
         assertEquals(1, updatedTrainer.getTrainingSummaryDuration().size());
-        assertTrue(updatedTrainer.getTrainingSummaryDuration().containsKey("4.2022"));
-        assertEquals(60, updatedTrainer.getTrainingSummaryDuration().get("4.2022"));
+        assertTrue(updatedTrainer.getTrainingSummaryDuration().containsKey("4:2022"));
+        assertEquals(60, updatedTrainer.getTrainingSummaryDuration().get("4:2022"));
     }
 
     @Test
@@ -188,8 +188,8 @@ public class TrainerWorkloadServiceTest {
         Trainer updatedTrainer = trainerWorkloadService.updateTrainerWorkLoad(trainer, request);
 
         assertEquals(1, updatedTrainer.getTrainingSummaryDuration().size());
-        assertTrue(updatedTrainer.getTrainingSummaryDuration().containsKey("4.2022"));
-        assertEquals(60, updatedTrainer.getTrainingSummaryDuration().get("4.2022"));
+        assertTrue(updatedTrainer.getTrainingSummaryDuration().containsKey("4:2022"));
+        assertEquals(60, updatedTrainer.getTrainingSummaryDuration().get("4:2022"));
     }
 
 }
