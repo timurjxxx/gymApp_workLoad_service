@@ -62,6 +62,9 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-activemq:3.2.3'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+	testImplementation 'io.cucumber:cucumber-java:7.16.1'
+	testImplementation 'io.cucumber:cucumber-junit:7.16.1'
 }
 
 tasks.named('test') {
