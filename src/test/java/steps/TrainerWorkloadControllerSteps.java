@@ -1,5 +1,6 @@
 package steps;
 
+import com.gypApp_workLoadService.controller.TrainerWorkloadController;
 import com.gypApp_workLoadService.dto.ActionType;
 import com.gypApp_workLoadService.dto.TrainerWorkloadRequest;
 import com.gypApp_workLoadService.service.TrainerWorkloadService;
@@ -7,6 +8,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -16,57 +18,74 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
 public class TrainerWorkloadControllerSteps {
 
+
     @Mock
     private TrainerWorkloadService trainerWorkloadService;
 
-    private TrainerWorkloadRequest request = new TrainerWorkloadRequest();
-    private ResponseEntity<HttpStatus> response;
+    @InjectMocks
+    private TrainerWorkloadController trainerWorkloadController;
 
-    public TrainerWorkloadControllerSteps() {
-        MockitoAnnotations.openMocks(this); // Initialize annotated mocks
+    private ResponseEntity<Void> responseEntity;
+    private TrainerWorkloadRequest request;
+
+
+    public TrainerWorkloadControllerSteps(){
+        MockitoAnnotations.openMocks(this);
+
     }
 
-    @Given("a trainer workload update request with type {string}")
-    public void aTrainerWorkloadUpdateRequestWithType(String arg0) {
-        request =  TrainerWorkloadRequest.builder()
-                .trainerFirstname("test")
-                .trainerLastname("test")
-                .trainerUsername("testUsername")
-                .trainingDate(LocalDate.now())
+    @Given("^a trainer workload request is received$")
+    public void aTrainerWorkloadRequestIsReceived() {
+        TrainerWorkloadRequest request = TrainerWorkloadRequest.builder()
+                .trainerUsername("john_doe")
+                .trainerFirstname("John")
+                .trainerLastname("Doe")
                 .isActive(true)
-                .trainingDuration(90)
+                .trainingDate(LocalDate.now())
+                .trainingDuration(60)
                 .type(ActionType.ADD)
                 .build();
-
-
-    }
-    @When("I send the update request")
-    public void iSendTheUpdateRequest() {
-        Mockito.doNothing().when(trainerWorkloadService).updateWorkload(request);
-        trainerWorkloadService.updateWorkload(request);
-
-
-    }
-    @Then("the workload should add training  duration successfully")
-    public void theWorkloadShouldBeUpdatedSuccessfully() {
-        response = ResponseEntity.ok().build();
+        doNothing().when(trainerWorkloadService).updateWorkload(request);
     }
 
-    @And("the response status code should be {int}")
-    public void theResponseStatusCodeShouldBe(int expectedStatusCode) {
-        assertEquals(expectedStatusCode, response.getStatusCode().value());
+    @When("^the trainer workload is updated$")
+    public void theTrainerWorkloadIsUpdated() {
+        TrainerWorkloadRequest request = TrainerWorkloadRequest.builder()
+                .trainerUsername("john_doe")
+                .trainerFirstname("John")
+                .trainerLastname("Doe")
+                .isActive(true)
+                .trainingDate(LocalDate.now())
+                .trainingDuration(60)
+                .type(ActionType.ADD)
+                .build();
+        responseEntity = trainerWorkloadController.updateWorkload(request);
     }
 
-    @Given("an invalid trainer workload update request")
-    public void anInvalidTrainerWorkloadUpdateRequest() {
-        
+    @Then("^the trainer workload should be successfully updated$")
+    public void theTrainerWorkloadShouldBeSuccessfullyUpdated() {
+        assert responseEntity.getStatusCode() == HttpStatus.OK;
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    @Given("^an invalid trainer workload request is received$")
+    public void anInvalidTrainerWorkloadRequestIsReceived() {
+        // Create an invalid request (for example, missing required fields)
+        request = TrainerWorkloadRequest.builder()
+                .trainerUsername(null) // Invalid: Username is null
+                .trainerFirstname("John")
+                .trainerLastname("Doe")
+                .type(ActionType.ADD)
+                .build();
     }
 
-    @And("the workload should remain unchanged")
-    public void theWorkloadShouldRemainUnchanged() {
+    @Then("the update should fail with a bad request response")
+    public void theUpdateShouldFailWithABadRequestResponse() {
+        assert responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST;
+
     }
 }
